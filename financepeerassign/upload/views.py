@@ -26,10 +26,10 @@ class FilesViewSet(viewsets.ModelViewSet):
                 name_change = name.replace("(","_")
             if ")" in name_change:
                 name_final = name_change.replace(")","")
-            f = open(os.getcwd()+('\\upload\\files\\'+name_change))
+            f = open(os.getcwd()+('\\financepeerassign\\upload\\files\\'+name_change))
             data = json.load(f)
         else:
-            f = open(os.getcwd()+('\\upload\\files\\'+filename))
+            f = open(os.getcwd()+('\\financepeerassign\\upload\\files\\'+filename))
             data = json.load(f)
             
         for data_item in data:
@@ -45,6 +45,5 @@ class FilesViewSet(viewsets.ModelViewSet):
         b = Files(filename = f.name, file=f)
         b.save()        
         self.save_data_in_db(f.name)
-        all_entries =Article.objects.all()
-        return HttpResponse(all_entries, content_type='application/json')
+        return HttpResponse(status=200)
     

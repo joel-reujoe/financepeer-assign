@@ -1,16 +1,26 @@
 
 import { Component } from 'react';
-import { Form, Input, Button, Spin } from 'antd';
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
-import * as actions from '../store/actions/auth';
-import { connect } from 'react-redux';
+import { Form, Input, Button } from 'antd';
 
 
 class Signup extends Component{
-    onFinish = (values) => {
-        this.props.onAuth(values.username,values.email,values.password, values.confirm);
-        this.props.history.push("/");
+
+    state = {
+        username: '',
+        password: ''
+      };
+    
+    handle_change = e => {
+        const name = e.target.name;
+        const value = e.target.value;
+        console.log(name)
+        this.setState(prevstate => {
+          const newState = { ...prevstate };
+          newState[name] = value;
+          return newState;
+        });
     };
+    
     render()
     {
         return (
@@ -26,11 +36,11 @@ class Signup extends Component{
                 },
                 {
                     required: true,
-                    message: 'Please input your E-mail!',
+                    message: 'Please input your username',
                 },
                 ]}
             >
-                <Input />
+                <Input name="username" onChange={this.handle_change} />
             </Form.Item>
             <Form.Item
                 name="email"
@@ -46,7 +56,7 @@ class Signup extends Component{
                 },
                 ]}
             >
-                <Input />
+                <Input name="email" onChange={this.handle_change}/>
             </Form.Item>
 
             <Form.Item
@@ -60,7 +70,7 @@ class Signup extends Component{
                 ]}
                 hasFeedback
             >
-                <Input.Password />
+                <Input.Password name="password1" onChange={this.handle_change}/>
             </Form.Item>
 
             <Form.Item
@@ -84,29 +94,17 @@ class Signup extends Component{
                 }),
                 ]}
             >
-                <Input.Password />
+                <Input.Password name="password2" onChange={this.handle_change}/>
             </Form.Item>
             <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" onClick={(e)=>{this.props.handle_signup(e,this.state)}}>
                 Register
                 </Button>
-                Or <NavLink style={{marginRight: '10px'}} to='/login/'>Login</NavLink>
             </Form.Item>
         </Form>
         )
     }
 }
-const mapStateToProps = (state) => {
-    return {
-        loading: state.loading,
-        error: state.error
-    }
-}
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onAuth: (username, password) => dispatch(actions.authLogin(username, password)) 
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default Signup;

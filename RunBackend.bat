@@ -1,0 +1,1 @@
+python financepeerassign/manage.py runserver

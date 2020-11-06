@@ -1,19 +1,25 @@
 import { Form, Input, Button, Spin } from 'antd';
 import { Component } from 'react';
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
-import { connect } from 'react-redux';
-import * as actions from '../store/actions/auth';
+
 
 const antIcon = <Spin type="loading" style={{ fontSize: 24 }}></Spin>
 class Login extends Component
 {
-
-   
-
-    onFinish = (values) => {
-        this.props.onAuth(values.username,values.password);
-        this.props.history.push("/");
+    state = {
+      username: '',
+      password: ''
     };
+
+    handleChange=(e)=>{
+      const name = e.target.name;
+      const value = e.target.value;
+      this.setState(prevstate => {
+        const newState = { ...prevstate };
+        newState[name] = value;
+        return newState;
+      });
+    }
+
     render()
     {
         let errorMessage = null;
@@ -40,22 +46,23 @@ class Login extends Component
                     label="Username"
                     name="username"
                     rules={[{ required: true, message: 'Please input your username!' }]}
+                    
                   >
-                    <Input />
+                    <Input name="username" onChange={this.handleChange} />
                   </Form.Item>
             
                   <Form.Item
                     label="Password"
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
+                    
                   >
-                    <Input.Password />
+                    <Input.Password name="password" onChange={this.handleChange} />
                   </Form.Item>
                   <Form.Item >
-                    <Button onClick={this.props.onLogin} type="primary" htmlType="submit" >
+                    <Button onClick={(e)=>{this.props.handle_login(e,this.state)}} type="primary" htmlType="submit" >
                       Submit
                     </Button>
-                    Or <NavLink style={{marginRight: '10px'}} to='/signup/'>register now!</NavLink>
                   </Form.Item>
                 </Form>
                 }
@@ -64,16 +71,5 @@ class Login extends Component
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        loading: state.loading,
-        error: state.error
-    }
-}
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onAuth: (username, password) => dispatch(actions.authLogin(username, password)) 
-    }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(Login);
+export default Login;

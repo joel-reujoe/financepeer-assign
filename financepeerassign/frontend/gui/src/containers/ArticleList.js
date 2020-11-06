@@ -62,12 +62,6 @@ class ArticleList extends React.Component{
         return (
             <div>
                 <Article data={this.state.article}/>
-                <input
-                type="file"
-                accept=".json"
-                onChange={this.onFileChange}
-                />
-                <button onClick={this.onFileUpload}>Upload</button>
             </div>
         );
     }
