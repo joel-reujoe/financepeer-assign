@@ -26,7 +26,7 @@ class FilesViewSet(viewsets.ModelViewSet):
                 name_change = name.replace("(","_")
             if ")" in name_change:
                 name_final = name_change.replace(")","")
-            f = open(os.getcwd()+('\\financepeerassign\\upload\\files\\'+name_change))
+            f = open(os.getcwd()+('\\financepeerassign\\upload\\files\\'+name_final))
             data = json.load(f)
         else:
             f = open(os.getcwd()+('\\financepeerassign\\upload\\files\\'+filename))

@@ -1,1 +1,1 @@
-python backend/manage.py runserver
+python financepeerassign/manage.py runserver
