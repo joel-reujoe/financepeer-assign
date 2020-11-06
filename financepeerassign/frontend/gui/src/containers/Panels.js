@@ -40,7 +40,8 @@ class Panel extends Component{
                 method:'POST',
                 data: formData
             }).then(response=>{
-                console.log(response.data)
+                console.log(response.data);
+                alert("file uploaded successfully");
             }).catch(error=>{
                 console.log(error);
             }); 

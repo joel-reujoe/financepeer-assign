@@ -22,21 +22,10 @@ class Login extends Component
 
     render()
     {
-        let errorMessage = null;
-        if(this.props.error)
-        {
-            errorMessage = (
-            <p>{this.props.error.message}</p>
-            );
-        }
+        
         return (
             <div>
-                {errorMessage}
                 {
-                    this.props.loading 
-                    ?
-                <Spin indicator={antIcon}></Spin>
-                :
                 <Form
                     onFinish ={this.onFinish}
                     name="basic"

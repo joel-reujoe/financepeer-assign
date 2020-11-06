@@ -19,7 +19,6 @@ class FilesViewSet(viewsets.ModelViewSet):
     parser_class = (JsonUploadParser)
 
     def save_data_in_db(self,filename):
-        Article.objects.all().delete()
         if "(" in filename and ")" in filename:
             if "(" in filename:
                 name = filename.replace(" ","")

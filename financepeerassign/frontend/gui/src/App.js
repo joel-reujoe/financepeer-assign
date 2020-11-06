@@ -41,8 +41,8 @@ class App extends Component {
         });
         }
         else{
-          console.log(json)
-          alert(json)
+          const keys = Object.keys(json)
+          alert(json[keys[0]])
         }
       });
   };
@@ -50,7 +50,6 @@ class App extends Component {
 
   handle_login = (e, data) => {
     e.preventDefault();
-    console.log(data)
     fetch('http://127.0.0.1:8000/rest-auth/login/', {
       method: 'POST',
       headers: {
@@ -60,7 +59,6 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(json => {
-        console.log(json)
         if(json.key)
         {
           localStorage.setItem('token', json.key);
@@ -70,14 +68,13 @@ class App extends Component {
           });
         }
         else{
-          alert(json)
+          const keys = Object.keys(json)
+          alert(json[keys])
         }
       });
   };
 
-  handle_upload = ()=>{
-    
-  }
+ 
 
 
   
