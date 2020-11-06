@@ -1,34 +1,73 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb} from 'antd';
+import { Layout, Menu} from 'antd';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../store/actions/auth';
+
+
 const { Header, Content, Footer } = Layout;
 
-class LayoutMain extends Component {
-    state = {  }
-    render() { 
+class LayoutMain extends React.Component {
+ 
+  state = {
+    isAuthenticated:false
+  }
+
+  componentDidMount()
+  {
+    const token = localStorage.getItem("token");
+    if(!token)
+    {
+      this.props.history.push('/login');
+    }
+    else{
+      this.setState({
+        isAuthenticated:true
+      })
+      this.props.history.push('/')
+    }
+  }
+
+  logout = ()=>{
+    localStorage.removeItem("token");
+    this.setState({
+      isAuthenticated:false
+    })
+    this.props.history.push('/login')
+  }
+  render(){
+
         return ( 
         <Layout>
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
               <div className="logo" />
-              <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                <Menu.Item key="1">nav 1</Menu.Item>
-                <Menu.Item key="2">nav 2</Menu.Item>
-                <Menu.Item key="3">nav 3</Menu.Item>
-              </Menu>
+              {
+                this.state.isAuthenticated ?
+
+                (<Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+                  <Menu.Item key="1" onClick={this.logout}>Logout</Menu.Item>
+                  <Menu.Item key="2">Articles</Menu.Item>
+                  <Menu.Item key="3">Upload</Menu.Item>
+                </Menu>
+                ):
+                (<Menu theme="dark"></Menu>)
+              }
             </Header>
             <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
-              <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
-              </Breadcrumb>
+              
               <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
-                Content
+                {this.props.children}
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
           </Layout>
          );
-    }
+      }
 }
  
-export default LayoutMain;
+const mapDispatchToProps = dispatch => {
+  return {
+      logout: () => dispatch(actions.logout()) 
+  }
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(LayoutMain));
