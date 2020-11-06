@@ -1,1 +1,1 @@
-environment\Scripts\activate
+enironment\Scripts\activate
