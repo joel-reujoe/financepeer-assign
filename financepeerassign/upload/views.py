@@ -7,6 +7,8 @@ from rest_framework.parsers import FileUploadParser
 import json
 import os
 from articles.models import Article
+import glob
+
 
 
 
@@ -19,21 +21,26 @@ class FilesViewSet(viewsets.ModelViewSet):
     parser_class = (JsonUploadParser)
 
     def save_data_in_db(self,filename):
-        if "(" in filename and ")" in filename:
-            if "(" in filename:
-                name = filename.replace(" ","")
-                name_change = name.replace("(","_")
-            if ")" in name_change:
-                name_final = name_change.replace(")","")
-            f = open(os.getcwd()+('\\financepeerassign\\upload\\files\\'+name_final))
-            data = json.load(f)
+        list_of_files = glob.glob(os.getcwd()+('\\financepeerassign\\upload\\files\\*'))
+        latest_file = max(list_of_files, key=os.path.getctime)
+        f = open(latest_file)
+        data = json.load(f)
+        valid_json = data != None and data != []
+        invalid_json = False
+        if valid_json:
+            for data_item in data:
+                if "userId" in data_item and "title" in data_item and "body" in data_item:
+                    a = Article(userId = data_item["userId"], title = data_item["title"], body=data_item["body"])
+                    a.save()
+                else:
+                    invalid_json = True
+                    break
         else:
-            f = open(os.getcwd()+('\\financepeerassign\\upload\\files\\'+filename))
-            data = json.load(f)
-            
-        for data_item in data:
-           a = Article(userId = data_item["userId"], title = data_item["title"], body=data_item["body"])
-           a.save()
+            invalid_json = True
+        
+        return not invalid_json
+        
+    
 
 
 
@@ -43,6 +50,9 @@ class FilesViewSet(viewsets.ModelViewSet):
         f = request.data['file']
         b = Files(filename = f.name, file=f)
         b.save()        
-        self.save_data_in_db(f.name)
-        return HttpResponse(status=200)
+        json_valid = self.save_data_in_db(f.name)
+        if json_valid:
+            return HttpResponse("File uploaded successfully",status=200)
+        else:
+            return HttpResponse("Invalid json data", status=200)
     

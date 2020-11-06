@@ -41,9 +41,10 @@ class Panel extends Component{
                 data: formData
             }).then(response=>{
                 console.log(response.data);
-                alert("file uploaded successfully");
+                alert(response.data);
             }).catch(error=>{
-                console.log(error);
+                console.log(error)
+                alert("json file has incorrect key")
             }); 
         }
       }; 
