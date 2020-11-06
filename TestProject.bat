@@ -1,1 +1,2 @@
-enironment\Scripts\activate
+virtualenv environment
+environment\Scripts\activate
